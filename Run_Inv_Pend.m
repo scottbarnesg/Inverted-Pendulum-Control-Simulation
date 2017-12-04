@@ -34,7 +34,7 @@ clSysN = op2cl(A, B, C, D, G, F1, F2);
 % Set Initial Conditions
 y_0 = -1.9; % Initial Position
 dy_0 = 0; % Intial Velocity
-theta_0 = pi/3; % Initial Angle
+theta_0 = pi; % Initial Angle
 dtheta_0 = 0; % Initial Angular Velocity
 
 % Select Simulation Parameters

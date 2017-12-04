@@ -29,8 +29,8 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
     % Real Time Plot of Simulation
     z1 = zeros(1, size(y, 1));
     y1 = y(:, 1);
-    y2 = y1+l*sin(y(:, 2));
-    z2 = l*cos(y(:, 2));
+    y2 = y1+l*sin(y(:, 3));
+    z2 = l*cos(y(:, 3));
     f = figure;
     if live == 't'
         for i = 1:size(y, 1)
@@ -52,12 +52,12 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
             out4 = ['t = ', num2str(t(i)), ' seconds'];
             text(-1.9*l, 1.3*l, out4);
             drawnow;
-            sim2gif(f, i, 'Demo.gif');
-            % pause(0.0001);
+            % sim2gif(f, i, 'Demo.gif');
+            pause(0.0001);
         end
     end
     % Calculate Error
-    e_ang = abs(y(:, 2));
+    e_ang = abs(y(:, 3));
     e_pos = abs(y(:, 1));
     
     % Plot Results
