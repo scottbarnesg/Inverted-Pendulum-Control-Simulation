@@ -31,7 +31,7 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
     y1 = y(:, 1);
     y2 = y1+l*sin(y(:, 2));
     z2 = l*cos(y(:, 2));
-    figure;
+    f = figure;
     if live == 't'
         for i = 1:size(y, 1)
             plot([y1(i) y2(i)], [z1(i) z2(i)], '-o');
@@ -51,7 +51,9 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
             text(-1.9*l, 1.9*l, out3);
             out4 = ['t = ', num2str(t(i)), ' seconds'];
             text(-1.9*l, 1.3*l, out4);
-            pause(0.0001);
+            drawnow;
+            sim2gif(f, i, 'Demo.gif');
+            % pause(0.0001);
         end
     end
     % Calculate Error

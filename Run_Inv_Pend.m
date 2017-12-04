@@ -32,14 +32,14 @@ clSysN = op2cl(A, B, C, D, G, F1, F2);
 %% Simulate
 
 % Set Initial Conditions
-y_0 = 1; % Initial Position
+y_0 = -1.9; % Initial Position
 dy_0 = 0; % Intial Velocity
-theta_0 = -pi; % Initial Angle
+theta_0 = pi/3; % Initial Angle
 dtheta_0 = 0; % Initial Angular Velocity
 
 % Select Simulation Parameters
 tf = 5+abs(5*cos(theta_0))+M/m % Termination Time
-dt = 0.05; % Change in Time (Decreasing dt increases processing time)
+dt = 0.1; % Change in Time (Decreasing dt increases processing time)
 % dt = tf/750; % Change in Time (750 Data Points)
 live = 't'; % Set Real Time Simulation to 't' (true) or 'f' (false).
 % Note: real time simulation is computationally demanding
