@@ -11,7 +11,7 @@ g = 9.81; % Gravity
 M = 10; % Cart Mass
 l = 1.5; % Pendulum Length
 F1 = 0.001; % Magnitude of Plant White Noise
-F2 = 0.1; % Magnitude of Measurement White Noise
+F2 = 0.001; % Magnitude of Measurement White Noise
 
 %% Create Open Loop Model
 [A, B, C, D] = create_ol_sys(m, M, l, g)
@@ -32,13 +32,13 @@ clSysN = op2cl_noise(Ac, B, C, D, F1, F2);
 %% Simulate
 
 % Set Initial Conditions
-y_0 = 1; % Initial Position
+y_0 = 1.5; % Initial Position
 dy_0 = 0; % Intial Velocity
-theta_0 = -pi/3; % Initial Angle
+theta_0 = -pi; % Initial Angle
 dtheta_0 = 0; % Initial Angular Velocity
 
 % Select Simulation Parameters
-tf = 12; % Termination Time
+tf = 7; % Termination Time
 dt = 0.1; % Change in Time (Decreasing dt increases processing time)
 % dt = tf/750; % Change in Time (750 Data Points)
 live = 't'; % Set Real Time Simulation to 't' (true) or 'f' (false).

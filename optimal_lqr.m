@@ -18,7 +18,7 @@ function G = optimal_lqr(A, B, C, D)
     format long g
     Q = C'*C; % Equally Weighs Angle and Position
     % Q = [100 0 0 0; 1 0 0 0; 0 0 0 0; 0 0 0 0]; % Emphasives Cart Position
-    % Q(3,3) = 100;
+    Q(1,1) = 100;
     R = 1;
     H = [A -B*inv(R)*B'; -Q -A'];
     [V, E] = eig(H);

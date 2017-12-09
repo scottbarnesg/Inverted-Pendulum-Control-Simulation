@@ -33,6 +33,7 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
     z2 = l*cos(y(:, 3));
     % Calculate Input
     inpt = G*x';
+    % "Live" Simulation
     if live == 't'
         f = figure;
         for i = 1:size(y, 1)
@@ -56,14 +57,14 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
             out5 = ['-Gx = ', num2str(inpt(i)), ' Newtons'];
             text(-1.9*l, 1.1*l, out5);
             drawnow;
-            if (mod(t(i), 0.5) == 0)
-               filename = ['Sim1-', num2str(t(i)), '.fig']; 
-               savefig(f, filename);
-               figure;
-               openfig(filename);
-            end
-            % sim2gif(f, i, 'Demo.gif');
-            pause(0.001);
+%             if (mod(t(i), 0.5) == 0)
+%                filename = ['Sim1-', num2str(t(i)), '.fig']; 
+%                savefig(f, filename);
+%                figure;
+%                openfig(filename);
+%             end
+            sim2gif(f, i, 'SwingUp1.gif');
+            % pause(0.001);
         end
     end
     % Calculate Error
