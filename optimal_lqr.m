@@ -16,8 +16,9 @@
 
 function G = optimal_lqr(A, B, C, D)
     format long g
-    % Q = C'*C; % Equally Weighs Angle and Position
-    Q = [10 0 0 0; 0 0 0 0; 0 0 1 0; 0 0 0 0]; % Emphasives Cart Position
+    Q = C'*C; % Equally Weighs Angle and Position
+    % Q = [100 0 0 0; 1 0 0 0; 0 0 0 0; 0 0 0 0]; % Emphasives Cart Position
+    % Q(3,3) = 100;
     R = 1;
     H = [A -B*inv(R)*B'; -Q -A'];
     [V, E] = eig(H);
@@ -31,9 +32,8 @@ function G = optimal_lqr(A, B, C, D)
     T1 = T(1:4, :);
     T2 = T(5:8, :);
     M = T2*inv(T1);
-    G = real(inv(R)*B'*M);
+    G = real(inv(R)*B'*M)
     % K = lqr(A, B, Q, R) Uncomment to verify with MATLAB's LQR optimizer
     disp('The optimal control law was found to be:');
-    disp(G(1:2));
-    disp(G(3:4));
+    disp(G);
 end

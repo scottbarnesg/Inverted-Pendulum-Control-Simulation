@@ -20,10 +20,10 @@
 %   F2: Magnitude of Measurement Noise
 
 function [A, B, C, D, F1, F2] = create_ol_sys(m, M, l, g, F)
-    %% Plant
-    A = [0 0 1 0; 0 0 0 1; 0 -m*g/M 0 0; 0 g*(M+m)/(m*l) 0 0];
-    B = [0; 0; 1/M; 1/(M*l)];
-    %% Measurement
+    % Plant
+    A = [0 0 1 0; 0 -m*g/M 0 0; 0 0 0 1; 0 g*(M+m)/(m*l) 0 0];
+    B = [0; 1/M; 0; -1/(M*l)];
+    % Measurement
     C = [1 0 0 0; 0 1 0 0; 0 0 1 0; 0 0 0 1];
     D = [0; 0; 0; 0];
 end

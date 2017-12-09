@@ -20,19 +20,21 @@
 %   t: Time Vector
 %   x: Input
 
-function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, clSys, live, l)
+function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, clSys, live, l, G, B)
     % Simulate
     t = 0:dt:tf;
-    u = wgn(1, size(t, 2), 1);
+    u = wgn(2, size(t, 2), 1);
     x0 = [y_0; dy_0; theta_0; dtheta_0];
-    [y, t, x] = lsim(clSys, u, t, x0);
+    [y, t, x] = lsim(clSys, u(1, :), t, x0);
     % Real Time Plot of Simulation
     z1 = zeros(1, size(y, 1));
     y1 = y(:, 1);
     y2 = y1+l*sin(y(:, 3));
     z2 = l*cos(y(:, 3));
-    f = figure;
+    % Calculate Input
+    inpt = G*x';
     if live == 't'
+        f = figure;
         for i = 1:size(y, 1)
             plot([y1(i) y2(i)], [z1(i) z2(i)], '-o');
             hold on;
@@ -51,40 +53,47 @@ function [y, t, x] = sim_inv_pend(tf, dt, F1, F2, y_0, dy_0, theta_0, dtheta_0, 
             text(-1.9*l, 1.9*l, out3);
             out4 = ['t = ', num2str(t(i)), ' seconds'];
             text(-1.9*l, 1.3*l, out4);
+            out5 = ['-Gx = ', num2str(inpt(i)), ' Newtons'];
+            text(-1.9*l, 1.1*l, out5);
             drawnow;
+            if (mod(t(i), 0.5) == 0)
+               filename = ['Sim1-', num2str(t(i)), '.fig']; 
+               savefig(f, filename);
+               figure;
+               openfig(filename);
+            end
             % sim2gif(f, i, 'Demo.gif');
-            pause(0.0001);
+            pause(0.001);
         end
     end
     % Calculate Error
     e_ang = abs(y(:, 3));
     e_pos = abs(y(:, 1));
-    
     % Plot Results
     fig1 = figure;
-    subplot(2, 1, 1);
-    plot(t, y(:, 1));
+    yyaxis left;
+    h1(1:3) = plot(t, y(:, 1), '-', t, y(:, 3), '.-r', [0, tf], [0, 0], '--');
+    xlabel('Time (s)');
+    ylabel('Magnitude (m, rad)');
+    title('Simulation Results');
+    yyaxis right;
+    h1(4:5) = plot(t, inpt, '-', [0, tf], [0, 0], '--');
+    ylabel('Controller Input (N)');
     axis tight;
-    xlabel('Time');
-    ylabel('Position');
-    title('Cart Position');
-    subplot(2, 1, 2);
-    plot(t, y(:, 2));
-    axis tight;
-    xlabel('Time');
-    ylabel('Angle');
-    title('Pendulum Angle (Radians)');
+    legend(h1([1, 2, 4]),'Cart Position (m)', 'Pendulum Angle (rad)', 'Controller Input (N)');
     fig2 = figure;
-    subplot(2, 1, 1);
-    plot(t, abs(e_pos));
-    axis tight;
-    xlabel('Time');
-    ylabel('Error');
-    title('Magnitude of  Positional Error');
-    subplot(2, 1, 2);
-    plot(t, abs(e_ang));
-    axis tight;
-    xlabel('Time');
-    ylabel('Error');
-    title('Magnitude of  Angular Error');
+    yyaxis left;
+    h2(1:2) = plot(t, y(:, 2), '-', [0, tf], [0, 0], '--');
+    xlabel('Time (s)');
+    ylabel('Cart Velocity (m/s)');
+    yyaxis right;
+    h2(3:4) = plot(t, y(:, 4), '-', [0, tf], [0, 0], '--');
+    ylabel('Pendulum Angular Velocity (rad/s)');
+    legend(h2([1, 3]), 'Cart Velocity (m/s)', 'Pendulum Angular Velocity (rad/s)');
+    fig3 = figure;
+    plot(t, F1*u(1, :), t, F2*u(2, :));
+    title('Noise');
+    xlabel('Time (s)');
+    ylabel('Noise Magnitude');
+    legend('Plant Noise', 'Measurement Noise');
 end
